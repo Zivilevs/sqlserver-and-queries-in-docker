@@ -1,0 +1,22 @@
+version: '3.0'
+services:
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1434:1434
+    volumes:
+      - ./AdventureWorks2019.bak:/var/opt/mssql/backup/AdventureWorks2019.bak
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'MsSqlServer2022!'
+      MSSQL_PID: 'Developer'
+    hostname: mssqlhost
+
+  mssqltools:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - mssqlserver
+    volumes:
+      - ./init_base.sh:/tmp/init_base.sh
+      - ./recreate_db.sql:/tmp/recreate_db.sql
+    command: /bin/bash ./tmp/init_base.sh
