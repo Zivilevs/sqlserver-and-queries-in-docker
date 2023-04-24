@@ -12,11 +12,18 @@ services:
       MSSQL_PID: 'Developer'
       MSSQL_IP_ADDRESS: '0.0.0.0'
     hostname: mssqlhost
+    healthcheck:
+      test: "/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P 'MsSqlServer2022!' -Q 'SELECT 1'"
+      interval: 15s
+      timeout: 1m30s
+      retries: 6
+      start_period: 45s
 
   mssqltools:
     image: mcr.microsoft.com/mssql-tools
     depends_on:
-      - mssqlserver
+      mssqlserver:
+        condition: service_healthy
     volumes:
       - ./init_base.sh:/tmp/init_base.sh
       - ./recreate_db.sql:/tmp/recreate_db.sql
