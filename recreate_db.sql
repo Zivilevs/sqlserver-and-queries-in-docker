@@ -1,5 +1,6 @@
 USE [master];
 GO
+IF DB_ID('AdventureWorks2019') IS NULL
 RESTORE DATABASE [AdventureWorks2019]
 FROM DISK = '/var/opt/mssql/backup/AdventureWorks2019.bak'
 WITH
