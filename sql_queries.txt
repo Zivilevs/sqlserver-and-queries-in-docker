@@ -1,0 +1,13 @@
+# All rows and columns from employee table using table aliasing. Sort ascending by jobtitle.
+USE AdventureWorks2019;
+SELECT * FROM HumanResources.Employee AS E
+ORDER BY E.JobTitle;
+
+
+# All rows and columns from employee table using table aliasing. Sort ascending by lastname.
+USE AdventureWorks2019;
+SELECT * FROM HumanResources.Employee AS E
+	JOIN Person.Person AS P ON E.BusinessEntityID=P.BusinessEntityID
+	ORDER BY LastName;
+
+# All rows and columns FirstName, LastName, BusinessEntityID as Employee_id. Sort ascending by lastname.
