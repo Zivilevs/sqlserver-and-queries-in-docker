@@ -11,3 +11,7 @@ SELECT * FROM HumanResources.Employee AS E
 	ORDER BY LastName;
 
 # All rows and columns FirstName, LastName, BusinessEntityID as Employee_id. Sort ascending by lastname.
+USE AdventureWorks2019;
+SELECT P.FirstName, P.LastName, P.BusinessEntityID AS Employee_id FROM Person.Person AS P
+ORDER BY P.LastName;
+

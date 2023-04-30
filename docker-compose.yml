@@ -1,11 +1,22 @@
-version: '3.0'
+version: '3.3'
+
+x-dbapp:
+  &main-dbapp
+  build: .
+  volumes:
+    - ./code:/var/code
+
 services:
+  dbapp-extract:
+    << : *main-dbapp
+    command: 'python extract_db.py'
+
   mssqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
       - '1433:1433'
     volumes:
-      - ./AdventureWorks2019.bak:/var/opt/mssql/backup/AdventureWorks2019.bak
+      - ./docs/AdventureWorks2019.bak:/var/opt/mssql/backup/AdventureWorks2019.bak
     environment:
       ACCEPT_EULA: 'Y'
       MSSQL_SA_PASSWORD: 'MsSqlServer2022!'
@@ -18,13 +29,15 @@ services:
       timeout: 1m30s
       retries: 6
       start_period: 45s
+    depends_on:
+      dbapp-extract:
+        condition: service_completed_successfully
 
-  mssqltools:
-    image: mcr.microsoft.com/mssql-tools
+  dbapp-queries:
+    << : *main-dbapp
     depends_on:
       mssqlserver:
         condition: service_healthy
-    volumes:
-      - ./init_base.sh:/tmp/init_base.sh
-      - ./recreate_db.sql:/tmp/recreate_db.sql
-    command: /bin/bash ./tmp/init_base.sh
+    #tty: true
+    #stdin_open: true
+    command: 'python execute_queries.py'
