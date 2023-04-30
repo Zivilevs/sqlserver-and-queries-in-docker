@@ -16,7 +16,7 @@ services:
     ports:
       - '1433:1433'
     volumes:
-      - ./docs/AdventureWorks2019.bak:/var/opt/mssql/backup/AdventureWorks2019.bak
+      - ./code/docs/AdventureWorks2019.bak:/var/opt/mssql/backup/AdventureWorks2019.bak
     environment:
       ACCEPT_EULA: 'Y'
       MSSQL_SA_PASSWORD: 'MsSqlServer2022!'
@@ -38,6 +38,4 @@ services:
     depends_on:
       mssqlserver:
         condition: service_healthy
-    #tty: true
-    #stdin_open: true
     command: 'python execute_queries.py'

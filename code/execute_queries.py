@@ -3,6 +3,7 @@ import csv
 
 from pathlib import Path
 
+
 server='mssqlserver'
 user='sa'
 password='MsSqlServer2022!'
@@ -11,10 +12,12 @@ conn = pymssql.connect(server=server, user=user, password=password, database=dat
 cursor = conn.cursor()
 
 def query_to_csv(cursor, filename):
-    filepath = Path('docs/{filename}')
+    filepath = Path(f'docs/{filename}')
     filepath.parent.mkdir(parents=True, exist_ok=True)
+
     with open(filepath, 'w') as f:
         outcsv = csv.writer(f)
+        
         # write column titles
         outcsv.writerow(x[0] for x in cursor.description)
         # write query results
@@ -30,6 +33,7 @@ WITH
     FILE = 1,
     NOUNLOAD,
     STATS = 5"""
+
 conn.autocommit(True)
 cursor.execute(query0)
 
