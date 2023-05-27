@@ -2,7 +2,7 @@ import requests
 from pathlib import Path
 
 
-filepath = Path("docs/AdventureWorks2019.bak")
+filepath = Path('docs/AdventureWorks2019.bak')
 filepath.parent.mkdir(parents=True, exist_ok=True)
 
 if not filepath.is_file():
