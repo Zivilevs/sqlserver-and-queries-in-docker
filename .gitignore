@@ -1,3 +1,5 @@
 adventure/*
 **/docs
-venv
+venv/
+code/.env
+steps.txt
