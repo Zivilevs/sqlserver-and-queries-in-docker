@@ -11,10 +11,6 @@ username = os.environ.get('ms_user')
 password = os.environ.get('ms_sa_password')
 database = os.environ.get('ms_default_database')
 
-print('passou')
-print(database)
-print(username)
-print(password)
 
 conn = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};'
                       'SERVER=localhost,1434;'
@@ -37,6 +33,4 @@ WITH
     NOUNLOAD,
     STATS = 5"""
 cursor.execute(restore)
-# print(cursor)
 cursor.close()
-print('ok')
