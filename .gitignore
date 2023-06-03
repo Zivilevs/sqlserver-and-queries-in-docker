@@ -2,4 +2,4 @@ adventure/*
 **/docs
 venv/
 code/.env
-steps.txt
+internal/

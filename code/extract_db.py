@@ -1,6 +1,6 @@
-import requests
 from pathlib import Path
 
+import requests
 
 filepath = Path('docs/AdventureWorks2019.bak')
 filepath.parent.mkdir(parents=True, exist_ok=True)

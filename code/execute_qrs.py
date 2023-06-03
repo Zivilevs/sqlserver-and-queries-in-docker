@@ -1,14 +1,13 @@
-import pymssql
 import csv
-
 from pathlib import Path
 
+import pymssql
 
-server = 'mssqlserver'
+# server = 'mssqlserver'
 user = 'sa'
 password = 'MsSqlServer2022!'
 database = 'master'
-conn = pymssql.connect(server=server, user=user, password=password, database=database)
+conn = pymssql.connect(server='localhost', user=user, password=password, database=database)
 cursor = conn.cursor()
 
 

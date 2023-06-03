@@ -1,8 +1,7 @@
-import pyodbc
 import os
 
+import pyodbc
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
@@ -13,7 +12,7 @@ database = os.environ.get('ms_default_database')
 
 
 conn = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};'
-                      'SERVER=localhost,1434;'
+                      'SERVER=localhost,1433;'
                       f'DATABASE={database};'
                       'Encrypt=no;'
                       f'UID={username};'
@@ -32,5 +31,5 @@ WITH
     FILE = 1,
     NOUNLOAD,
     STATS = 5"""
-cursor.execute(restore)
+res = cursor.execute(restore)
 cursor.close()
