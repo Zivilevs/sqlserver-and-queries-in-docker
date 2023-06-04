@@ -32,17 +32,30 @@ engine = create_engine(connection_url)
 conn = engine.connect()
 conn.connection.add_output_converter(-151, HandleHierarchyId)
 
-stmt = """SELECT top 5 m.name as schema_name, t.name AS table_name, s.row_count AS row_count
-FROM   sys.tables t
-JOIN   sys.dm_db_partition_stats s
-  ON t.object_id  = s.object_id
-JOIN sys.schemas m
-ON m.schema_id=t.schema_id
- AND t.type_desc = 'USER_TABLE'
- AND s.index_id IN (0, 1)
-ORDER  BY row_count desc;"""
-
-res = conn.execute(text(stmt))
+drop_table = """DROP TABLE IF EXISTS #top_5;"""
+temp_table = """SELECT top 5 m.name as schema_name, t.name AS table_name,
+                s.row_count AS row_count, t.object_id as object_id
+                INTO #top_5
+                FROM   sys.tables t
+                JOIN   sys.dm_db_partition_stats s
+                  ON t.object_id  = s.object_id
+                JOIN sys.schemas m
+                ON m.schema_id=t.schema_id
+                 AND t.type_desc = 'USER_TABLE'
+                 AND s.index_id IN (0, 1)
+                ORDER  BY row_count desc;
+                """
+find_top_tables_and_indexes = """SELECT t.*, f.name as foreign_key, i.name as index_name, i.type as index_type
+                                 FROM #top_5 as t
+                                 LEFT JOIN sys.foreign_keys f
+                                 ON f.parent_object_id = t.object_id
+                                 LEFT JOIN sys.indexes i
+                                 ON i.object_id = t.object_id AND i.index_id NOT IN (0, 1)
+                                 ;
+                                 """
+conn.execute(text(drop_table))
+conn.execute(text(temp_table))
+res = conn.execute(text(find_top_tables_and_indexes))
 
 print(res.keys())
 for row in res.fetchall():
