@@ -26,9 +26,9 @@ def query_to_csv(data, filename):
         outcsv.writerows(data.fetchall())
 
 
-username = os.environ.get('ms_user')
-password = os.environ.get('ms_sa_password')
-database = os.environ.get('ms_default_database')
+username = os.environ.get('MS_USER')
+password = os.environ.get('MS_SA_PASSWORD')
+database = os.environ.get('MS_DEFAULT_DATABASE')
 
 connection_string = ('DRIVER={ODBC Driver 18 for SQL Server};'
                      'SERVER=localhost,1433;'

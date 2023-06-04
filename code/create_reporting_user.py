@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-server = os.environ.get('ms_server')
-username = os.environ.get('ms_user')
-password = os.environ.get('ms_sa_password')
-database = os.environ.get('ms_default_database')
+server = os.environ.get('MS_SERVER')
+username = os.environ.get('MS_USER')
+password = os.environ.get('MS_SA_PASSWORD')
+database = os.environ.get('MS_DEFAULT_DATABASE')
 
 
 conn1 = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};'

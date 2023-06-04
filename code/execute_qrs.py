@@ -23,8 +23,8 @@ def query_to_csv(cursor, filename):
         outcsv.writerows(cursor.fetchall())
 
 
-# restore AdventureWorks2019
-query0 = """USE [master];IF DB_ID('AdventureWorks2019') IS NULL
+# Restore AdventureWorks2019
+restore_db = """USE [master];IF DB_ID('AdventureWorks2019') IS NULL
 RESTORE DATABASE [AdventureWorks2019]
 FROM DISK = '/var/opt/mssql/backup/AdventureWorks2019.bak'
 WITH
@@ -35,26 +35,26 @@ WITH
     STATS = 5"""
 
 conn.autocommit(True)
-cursor.execute(query0)
+cursor.execute(restore_db)
 
+# Run queries
+file_name_qr1 = 'ByJobTitle.csv'
+stmt_by_job_title = """USE [AdventureWorks2019];SELECT * FROM HumanResources.Employee AS E
+                       ORDER BY E.JobTitle"""
+cursor.execute(stmt_by_job_title)
+query_to_csv(cursor, file_name_qr1)
 
-file1 = 'ByJobTitle.csv'
-query1 = """USE [AdventureWorks2019];SELECT * FROM HumanResources.Employee AS E
-            ORDER BY E.JobTitle"""
-cursor.execute(query1)
-query_to_csv(cursor, file1)
+file_name_qr2 = 'ByLastName.csv'
+stnt_employees_by_lastnaname = """USE [AdventureWorks2019];SELECT * FROM HumanResources.Employee AS E JOIN Person.Person
+                                  AS P ON E.BusinessEntityID=P.BusinessEntityID ORDER BY LastName"""
+cursor.execute(stnt_employees_by_lastnaname)
+query_to_csv(cursor, file_name_qr2)
 
-file2 = 'ByLastName.csv'
-query2 = """USE [AdventureWorks2019];SELECT * FROM HumanResources.Employee AS E JOIN Person.Person
-            AS P ON E.BusinessEntityID=P.BusinessEntityID ORDER BY LastName"""
-cursor.execute(query2)
-query_to_csv(cursor, file2)
-
-file3 = 'Only3colByLastName.csv'
-query3 = """USE [AdventureWorks2019];SELECT P.FirstName, P.LastName, P.BusinessEntityID
-            AS Employee_id FROM Person.Person AS P ORDER BY P.LastName"""
-cursor.execute(query3)
-query_to_csv(cursor, file3)
+file_name_qr3 = 'Only3colByLastName.csv'
+stmt_3_cols_by_last_name = """USE [AdventureWorks2019];SELECT P.FirstName, P.LastName, P.BusinessEntityID
+                              AS Employee_id FROM Person.Person AS P ORDER BY P.LastName"""
+cursor.execute(stmt_3_cols_by_last_name)
+query_to_csv(cursor, file_name_qr3)
 
 conn.autocommit(False)
 cursor.close()
