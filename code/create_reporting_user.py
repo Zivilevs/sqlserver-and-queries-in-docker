@@ -22,7 +22,7 @@ conn1 = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};'
 conn1.autocommit = True
 cursor = conn1.cursor()
 
-restore = """USE master;
+create_user = """USE master;
 IF NOT EXISTS(SELECT name from master.sys.server_principals WHERE name='reporting')
 BEGIN
 CREATE LOGIN reporting WITH PASSWORD='Reporting123';
@@ -30,7 +30,7 @@ USE AdventureWorks2019;
 CREATE USER reporting FOR LOGIN reporting;
 ALTER ROLE db_datareader ADD MEMBER reporting;
 END"""
-res = cursor.execute(restore)
+res = cursor.execute(create_user)
 cursor.close()
 
 
